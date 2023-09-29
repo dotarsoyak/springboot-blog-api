@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.GenerationType.AUTO;
 
 @Entity
@@ -17,8 +18,9 @@ public class Post {
     private String content;
     private String author;
 
-    @OneToMany()
-    private String comments;
+    private List<Comment> comments;
+
+
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
     private Date created;
@@ -30,7 +32,7 @@ public class Post {
         super();
     }
 
-    public Post(String title, String content, String author, String comments) {
+    public Post(String title, String content, String author, List<Comment> comments) {
         this.title = title;
         this.content = content;
         this.author = author;
@@ -66,8 +68,9 @@ public class Post {
         return author;
     }
 
-    public String getComments() {
-        return comments;
+    @OneToMany
+    public List<Comment> getComments() {
+        return this.comments;
     }
 
     public Date getCreated() {
