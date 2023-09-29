@@ -1,41 +1,51 @@
 package com.dotarsoyak.blog.entities;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
 public class Comment {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private Long postId;
     private String comment;
-    private Long authorId;
-    @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
-    private Date created;
+    private Integer authorId;
+    //@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
+    private Date created = Date.from(Instant.now());
 
-    private Post post;
+    //bidirectional relationship
+    //@ManyToOne(optional = false, cascade = CascadeType.ALL)
+    /*private Post post;
 
-    @ManyToOne
-    @JoinColumn(name="id", nullable=true)
-    public Post getPost(){
-        return this.post;
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }*/
+
+    public Long getId() {
+        return id;
+    }
+
+    public Date getCreated() {
+        return created;
     }
 
     public Comment(){
         super();
     }
 
-    public Long getPostId() {
-        return postId;
-    }
-
     public String getComment() {
         return comment;
     }
 
-    public Long getAuthorId() {
+    public Integer getAuthorId() {
         return authorId;
     }
 
@@ -43,7 +53,6 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", postId=" + postId +
                 ", comment='" + comment + '\'' +
                 ", authorId=" + authorId +
                 ", created=" + created +
