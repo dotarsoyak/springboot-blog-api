@@ -2,6 +2,7 @@ package com.dotarsoyak.blog.entities;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -13,13 +14,15 @@ public class Comment {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String comment;
-    private Integer authorId;
+    private Long authorId;
     //@Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
     private Date created = Date.from(Instant.now());
 
     //bidirectional relationship
-    //@ManyToOne(optional = false, cascade = CascadeType.ALL)
-    /*private Post post;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="post_id")
+    @JsonIgnore
+    private Post post;
 
     public Post getPost() {
         return post;
@@ -27,7 +30,7 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
-    }*/
+    }
 
     public Long getId() {
         return id;
@@ -41,11 +44,17 @@ public class Comment {
         super();
     }
 
+    public Comment(String comment, Long authorId, Post post) {
+        this.comment = comment;
+        this.authorId = authorId;
+        this.post = post;
+    }
+
     public String getComment() {
         return comment;
     }
 
-    public Integer getAuthorId() {
+    public Long getAuthorId() {
         return authorId;
     }
 

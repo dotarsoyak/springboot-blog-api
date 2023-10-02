@@ -2,13 +2,15 @@ package com.dotarsoyak.blog.controllers;
 
 import com.dotarsoyak.blog.entities.Comment;
 import com.dotarsoyak.blog.entities.Post;
+import com.dotarsoyak.blog.models.PostRequest;
 import com.dotarsoyak.blog.services.CommentService;
 import com.dotarsoyak.blog.services.PostService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,7 +21,7 @@ import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-@Controller
+@RestController
 @RequestMapping(path = "/post")
 public class PostController {
     private static final Logger LOG = LoggerFactory.getLogger(PostController.class);
@@ -42,10 +44,10 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> save(@RequestBody Post post, UriComponentsBuilder ucb){
-        LOG.info("Receiving a post: {}", post);
+    public ResponseEntity<Post> save(@RequestBody @Valid PostRequest postRequest, UriComponentsBuilder ucb, BindingResult result){
+        LOG.info("Receiving a post: {}", postRequest);
 
-        var createdPost = this.postService.save(post);
+        var createdPost = this.postService.save(postRequest);
 
         URI location = ucb.path("/post/add/{id}")
                 .buildAndExpand(createdPost.getId())
@@ -64,10 +66,10 @@ public class PostController {
         if(post.isPresent()){
             updatedPost = post.get();
             var commentList = new ArrayList<Comment>();
-
             commentList.add(comment);
-            updatedPost.setComment(commentList);
-            this.postService.save(updatedPost);
+
+            updatedPost.setComments(commentList);
+            this.postService.create(updatedPost);
 
             URI location = ucb.path("/post/{id}/comment/add")
                     .buildAndExpand(id)
@@ -78,6 +80,5 @@ public class PostController {
 
         return ResponseEntity.created(URI.create("")).build();
     }
-
 
 }
