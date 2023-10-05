@@ -39,6 +39,7 @@ public class Post {
 
     //@Column(columnDefinition = "DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP")
     private Date updated;
+    private Integer published = 0;
 
     public Post(String title, String content, Integer authorId, List<Comment> comments) {
         this.title = title;

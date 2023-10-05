@@ -14,20 +14,24 @@ import java.util.Date;
 @Setter
 @ToString
 public class PostRequest {
+    private static final Integer PUBLISHED = 0;
+
     private Long id;
 
     @NotNull(message="Es necesario capturar un título.")
     @NotBlank(message = "Por favor capture el título.")
     private String title;
+    @NotBlank(message = "Por favor capture el contenido del post.")
     private String content;
     private Integer authorId;
     private Date created = Date.from(Instant.now());
     private Date updated;
+    private Integer published = 0;
 
     public static Post map(PostRequest postRequest){
         Post post = Post.build(0L, postRequest.getTitle()
                 ,postRequest.getContent(), postRequest.getAuthorId(), null
-                ,postRequest.getCreated(), postRequest.getUpdated());
+                ,postRequest.getCreated(), postRequest.getUpdated(), PUBLISHED);
 
         return post;
     }
