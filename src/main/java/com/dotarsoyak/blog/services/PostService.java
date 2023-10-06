@@ -2,6 +2,8 @@ package com.dotarsoyak.blog.services;
 
 import com.dotarsoyak.blog.entities.Post;
 import com.dotarsoyak.blog.models.PostRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +15,6 @@ public interface PostService {
     Post create(Post post);
 
     Optional<Post> findById(Long id);
+
+    Page<Post> findAll(Pageable pageable);
 }

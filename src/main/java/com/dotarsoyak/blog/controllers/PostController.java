@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -31,16 +34,19 @@ public class PostController {
     private CommentService commentService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Post>> findAll(){
-        LOG.info("Start findAll Method.");
+    public ResponseEntity<List<Post>> findAll(Pageable pageable)
+    {
+        Page<Post> page=
+                this.postService.findAll(
+                        PageRequest.of(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                pageable.getSort()
+                        )
+                );
 
-        List<Post> posts = this.postService.findAll();
-
-        if(posts != null && posts.size() > 0){
-            return ok(posts);
-        }
-
-        return ResponseEntity.notFound().build();
+        List<Post> products = page.getContent();
+        return ResponseEntity.ok(products);
     }
 
     @PostMapping("/add")

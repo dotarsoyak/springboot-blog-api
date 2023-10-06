@@ -7,6 +7,8 @@ import com.dotarsoyak.blog.repositories.PostRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,5 +52,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Optional<Post> findById(Long id) {
         return this.postRepository.findById(id);
+    }
+
+    @Override
+    public Page<Post> findAll(Pageable pageable) {
+        return this.postRepository.findAll(pageable);
     }
 }
