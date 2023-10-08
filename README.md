@@ -1,5 +1,5 @@
 # springboot-blog-api
-Springboot api rest for blog application with mysql database y jparepository
+Springboot api rest for blog application with mysql database y jparepository.
 
 ### Nota
 #### Configuracion para generar jar desde intellij:
